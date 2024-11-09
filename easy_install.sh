@@ -4,6 +4,8 @@
 #: Maintainers:
 #: - Sypher
 #: - nailshard
+#: - Modified for takat.nl
+#: - Version 0.1
 
 # enforce failfast
 set -o errexit
@@ -41,7 +43,7 @@ PY3_VER_STABLE="3.11"
 STABLE_FTS_VERSION="2.0.66"
 LEGACY_FTS_VERSION="1.9.9.6"
 LATEST_FTS_VERSION=$(curl -s https://pypi.org/pypi/FreeTAKServer/json | python3 -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
-FTS_HOME="/home/ftsserver"
+FTS_HOME="/home/ftsserver"      # Moet een startswitch worden voor het opgeven van de user waaronder de FTS gaat draaien. 
 FTS_VENV="${FTS_HOME}/fts.venv"
 
 DRY_RUN=0
@@ -630,6 +632,7 @@ function cleanup() {
 ###############################################################################
 # MAIN BUSINESS LOGIC HERE
 ###############################################################################
+# TODO: de switch maken voor het opgeven van de user waaronder FTS gaat draaien (zie regel 619 -u ftsserver)
 
 setup_colors
 parse_params "${@}"
