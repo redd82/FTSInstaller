@@ -140,6 +140,7 @@ Available options:
     --dev-test   Sets TEST Envar to 1
     --dry-run    Sets up dependencies but exits before running any playbooks
     --ip-addr    Explicitly set IP address (when http://ifconfig.me/ip is wrong)
+-u, --user	 Set user to install the fts server
 USAGE_TEXT
   exit
 }
