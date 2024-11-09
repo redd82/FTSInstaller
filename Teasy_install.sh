@@ -45,7 +45,7 @@ PY3_VER_STABLE="3.11"
 STABLE_FTS_VERSION="2.0.66"
 LEGACY_FTS_VERSION="1.9.9.6"
 LATEST_FTS_VERSION=$(curl -s https://pypi.org/pypi/FreeTAKServer/json | python3 -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
-FTS_HOME="/"                     # defaults to root
+FTS_HOME="/root"                     # defaults to root
 FTS_VENV="${FTS_HOME}/fts.venv"
 
 DRY_RUN=0
@@ -65,7 +65,6 @@ function check_user_exists() {
     echo -e "${GREEN} User '$USER_NAME' exists on this system. ${NOFORMAT}"
     #set home directory
     FTS_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
-
   else   
     echo -e "${RED}ERROR${NOFORMAT}"
     echo "Error: User '$USER_NAME' does not exist on this system."
