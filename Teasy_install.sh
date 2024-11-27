@@ -654,7 +654,7 @@ function run_playbook() {
   [[ -n "${WEBMAP_FORCE_INSTALL:-}" ]] && env_vars="$env_vars $WEBMAP_FORCE_INSTALL"
   [[ -n "${CORE:-}" ]] && pb=install_mainserver || pb=install_all
   echo -e "${BLUE}Running Ansible Playbook ${GREEN}$pb${BLUE}...${NOFORMAT}"
-  ansible-playbook -u ftsserver  ${pb}.yml \
+  ansible-playbook -u $USER_NAME ${pb}.yml \
       --connection=local \
       --inventory localhost, \
       --extra-vars "$env_vars" \
