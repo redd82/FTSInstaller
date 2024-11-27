@@ -179,121 +179,6 @@ function die() {
 ###############################################################################
 # Parse parameters
 ###############################################################################
-function parse_params_OLD() {
-
-  # The default 'apt verbosity' is verbose. Set it to quiet, since that's what our script assumes
-  # unset this later if we want verbosity
-  APT_VERBOSITY="-qq"
-
-  while true; do
-    case "${1-}" in
-
-    --help | -h)
-      usage
-      exit 0
-      shift
-      ;;
-
-    --verbose | -v)
-      echo "Verbose output"
-      set -x
-
-      NO_COLOR=1
-      GIT_TRACE=true
-      GIT_CURL_VERBOSE=true
-      GIT_SSH_COMMAND="ssh -vvv"
-      unset APT_VERBOSITY # verbose is the default
-      ANSIBLE_VERBOSITY="-vvvvv"
-
-      shift
-      ;;
-
-    --check | -c)
-      CHECK=1
-      shift
-      ;;
-
-    --core)
-      CORE=1
-      shift
-      ;;
-
-    --stable | -s)
-      INSTALL_TYPE="stable"
-      shift
-      ;;
-
-    --latest)
-      INSTALL_TYPE="latest"
-      shift
-      ;;
-
-    --legacy | -l)
-      INSTALL_TYPE="legacy"
-      shift
-      ;;
-
-    -B)
-      echo "${RED}${hsep}${hsep}${hsep}"
-      echo -e "This option is not supported for public use.\n\
-      It will alter the version of this installer, which means:\n\
-      1. it may make breaking system alterations\n\
-      2. use at your own risk\n\
-      It is highly recommended that you do not continue\n\
-      unless you've selected this option for a specific reason"
-      echo "${hsep}${hsep}${hsep}${NOFORMAT}"
-      CBRANCH=$2
-      shift 2
-      ;;
-
-    --repo)
-      REPO=$2
-      shift 2
-
-      if [[ -d ~/FreeTAKHub-Installation ]]
-        then rm -rf ~/FreeTAKHub-Installation
-      fi
-      ;;
-
-    --branch)
-      BRANCH=$2
-      shift 2
-      ;;
-
-    --dev-test)
-      TEST=1
-      shift
-      ;;
-
-    --dry-run)
-      DRY_RUN=1
-      shift
-      ;;
-
-    --ip-addr)
-      FTS_IP_CUSTOM=$2
-      shift 2
-      echo "Using the IP of ${FTS_IP_CUSTOM}"
-      ;;
-
-    --no-color)
-      NO_COLOR=1
-      shift
-      ;;
-
-    -?*)
-      die "ERROR: unknown option $1"
-      ;;
-
-    *)
-      break
-      ;;
-
-    esac
-  done
-
-}
-
 function parse_params() {
 
   # The default 'apt verbosity' is verbose. Set it to quiet, since that's what our script assumes
@@ -477,24 +362,17 @@ function set_versions() {
 ###############################################################################
 # Check if script was ran as root. This script requires root execution.
 ###############################################################################
-#function check_root() {
-#
-#  echo -e -n "${BLUE}Checking if this script is running as root...${NOFORMAT}"
+function check_root() {
 
-
-
+  echo -e -n "${BLUE}Checking if this script is running as root...${NOFORMAT}"
   # check Effective User ID (EUID) for root user, which has an EUID of 0.
-#  if [[ "$EUID" -ne 0 ]]; then
-
-#    echo -e "${RED}ERROR${NOFORMAT}"
-#    die "This script requires running as root. Use sudo before the command."
-
-#  else
-
-#    echo -e "${GREEN}Success!${NOFORMAT}"
-
-#  fi
-#}
+  if [[ "$EUID" -ne 0 ]]; then
+    echo -e "${RED}ERROR${NOFORMAT}"
+    die "This script requires running as root. Use sudo before the command."
+  else
+    echo -e "${GREEN}Success!${NOFORMAT}"
+  fi
+}
 
 ###############################################################################
 # Check for supported operating system and warn user if not supported.
@@ -748,6 +626,11 @@ function generate_key_pair() {
   echo -e \
     "${BLUE}Creating a public and private keys if non-existent...${NOFORMAT}"
 
+# check if .ssh directory exists, if not create
+    if [ ! -d "${FTS_HOME}/.ssh" ]; then
+      mkdir ${FTS_HOME}/.ssh
+    fi
+
   # check for public and private keys
   if [[ ! -e ${FTS_HOME}/.ssh/id_rsa.pub ]]; then
     # generate keys
@@ -788,8 +671,8 @@ function cleanup() {
 # MAIN BUSINESS LOGIC HERE
 ###############################################################################
 # TODO: de switch maken voor het opgeven van de user waaronder FTS gaat draaien (zie regel 619 -u ftsserver)
-
 setup_colors
+check_root
 parse_params "${@}"
 set_versions
 check_os
