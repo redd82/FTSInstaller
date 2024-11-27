@@ -58,8 +58,6 @@ hsep="*********************"
 ###############################################################################
 
 USER_NAME="root"                # default to root
-
-
 function check_user_exists() {
   if id "$USER_NAME" &>/dev/null; then
     echo -e "${GREEN} User '$USER_NAME' exists on this system. ${NOFORMAT}"
@@ -71,9 +69,6 @@ function check_user_exists() {
     die "This script requires an existing user."
   fi
 }
-
-
-
 
 ###############################################################################
 # Takat specific variables/functions [end]
@@ -140,7 +135,7 @@ Available options:
     --dev-test   Sets TEST Envar to 1
     --dry-run    Sets up dependencies but exits before running any playbooks
     --ip-addr    Explicitly set IP address (when http://ifconfig.me/ip is wrong)
--u, --user	 Set user to install the fts server
+-u, --user	    Set user to install the fts server
 USAGE_TEXT
   exit
 }
@@ -798,6 +793,7 @@ setup_colors
 parse_params "${@}"
 set_versions
 check_os
+check_user_exists
 # do_checks
 download_dependencies
 [[ "$DEFAULT_INSTALL_TYPE" == "$INSTALL_TYPE" ]] && install_python_environment
