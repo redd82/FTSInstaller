@@ -17,12 +17,13 @@ set -o pipefail
 # This disables Apt's "restart services" interactive dialog
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_SUSPEND=1
+MY_IPA=`curl ifconfig.me/ip`
 NEEDRESTART=
 
 # trap or catch signals and direct execution to cleanup
 trap cleanup SIGINT SIGTERM ERR EXIT
 
-DEFAULT_REPO="https://github.com/FreeTAKTeam/FreeTAKHub-Installation.git"
+DEFAULT_REPO="https://github.com/redd82/TAKATFreeTakServer.git"
 REPO=${REPO:-$DEFAULT_REPO}
 DEFAULT_BRANCH="main"
 BRANCH=${BRANCH:-$DEFAULT_BRANCH}
@@ -352,7 +353,7 @@ function set_versions() {
 #  fi
 
 #  if [[ -n "${TEST-}" ]]; then
-#      REPO="https://github.com/janseptaugust/FreeTAKHub-Installation.git"
+#      REPO="https://github.com/redd82/TAKATFreeTakServer.git"
 #  fi
 
 #}
@@ -651,6 +652,7 @@ function run_playbook() {
   [[ -n "${FTS_IP_CUSTOM:-}" ]] && env_vars="$env_vars fts_ip_addr_extra=$FTS_IP_CUSTOM"
   [[ -n "${WEBMAP_FORCE_INSTALL:-}" ]] && env_vars="$env_vars $WEBMAP_FORCE_INSTALL"
   [[ -n "${CORE:-}" ]] && pb=install_mainserver || pb=install_all
+
   echo -e "${BLUE}Running Ansible Playbook ${GREEN}$pb${BLUE}...${NOFORMAT}"
   ansible-playbook -u $USER_NAME ${pb}.yml \
       --connection=local \
