@@ -17,7 +17,7 @@ set -o pipefail
 # This disables Apt's "restart services" interactive dialog
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_SUSPEND=1
-MY_IPA=`curl ifconfig.me/ip`
+FTS_IP_CUSTOM=`curl ifconfig.me/ip`
 NEEDRESTART=
 
 # trap or catch signals and direct execution to cleanup
