@@ -23,7 +23,7 @@ NEEDRESTART=
 # trap or catch signals and direct execution to cleanup
 trap cleanup SIGINT SIGTERM ERR EXIT
 
-DEFAULT_REPO="https://github.com/redd82/TAKATFreeTakServer.git"
+DEFAULT_REPO="https://github.com/redd82/FreeTAKHub-Install_TAKAT.git"
 REPO=${REPO:-$DEFAULT_REPO}
 DEFAULT_BRANCH="main"
 BRANCH=${BRANCH:-$DEFAULT_BRANCH}
@@ -341,22 +341,21 @@ function set_versions() {
 ###############################################################################
 # Do checks or skip unnecessary ones if non-interactive
 ###############################################################################
-#function do_checks() {
+function do_checks() {
 
-#  check_root
+check_root
 
-#  if [[ -n "${CHECK-}" ]]; then
-#    check_os
+  if [[ -n "${CHECK-}" ]]; then
+    check_os
     # check_architecture
-#  else
-#    WEBMAP_FORCE_INSTALL="webmap_force_install=true"
-#  fi
+  else
+    WEBMAP_FORCE_INSTALL="webmap_force_install=true"
+  fi
 
-#  if [[ -n "${TEST-}" ]]; then
-#      REPO="https://github.com/redd82/TAKATFreeTakServer.git"
-#  fi
-
-#}
+  if [[ -n "${TEST-}" ]]; then
+      REPO="https://github.com/redd82/FreeTAKHub-Install_TAKAT.git"
+  fi
+}
 
 ###############################################################################
 # Check if script was ran as root. This script requires root execution.
