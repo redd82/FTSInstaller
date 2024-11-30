@@ -560,7 +560,7 @@ function install_python_environment() {
   python3 -m pip install --force-reinstall psutil
 
   deactivate
-
+  chown -R $USER_NAME $FTS_HOME/fts.venv
 }
 ###############################################################################
 # Handle git repository
