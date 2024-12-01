@@ -249,8 +249,8 @@ function parse_params() {
       REPO=$2
       shift 2
 
-      if [[ -d ~/FreeTAKHub-Installation ]]
-        then rm -rf ~/FreeTAKHub-Installation
+      if [[ -d $FTS_HOME/FreeTAKHub-Installation ]]
+        then rm -rf $FTS_HOME/FreeTAKHub-Installation
       fi
       ;;
 
@@ -276,9 +276,9 @@ function parse_params() {
       ;;
 
     --user | -u)
-      echo "${YELLOW}${hsep}${hsep}${hsep}"  
+      echo "${hsep}${hsep}${hsep}"  
       echo -e "Takat only: define installation user \n\ defaults to root."
-      echo "${hsep}${hsep}${hsep}${NOFORMAT}" 
+      echo "${hsep}${hsep}${hsep}" 
       USER_NAME=$2
       shift 2
       ;;
@@ -568,23 +568,23 @@ function install_python_environment() {
 function handle_git_repository() {
 
   echo -e -n "${BLUE}Checking for FreeTAKHub-Installation in home directory..."
-  cd ~
+  cd $FTS_HOME
 
   [[ -n $CBRANCH ]] && BRANCH=$CBRANCH
   # check for FreeTAKHub-Installation repository
-  if [[ ! -d ~/FreeTAKHub-Installation ]]; then
+  if [[ ! -d $FTS_HOME/FreeTAKHub-Installation ]]; then
 
     echo -e "local working git tree NOT FOUND"
     echo -e "Cloning the FreeTAKHub-Installation repository...${NOFORMAT}"
-    git clone --branch "${BRANCH}" ${REPO}  ~/FreeTAKHub-Installation
+    git clone --branch "${BRANCH}" ${REPO}  $FTS_HOME/FreeTAKHub-Installation
 
-    cd ~/FreeTAKHub-Installation
+    cd $FTS_HOME/FreeTAKHub-Installation
 
   else
 
     echo -e "FOUND"
 
-    cd ~/FreeTAKHub-Installation
+    cd $FTS_HOME/FreeTAKHub-Installation
 
     echo -e \
       "Pulling latest from the FreeTAKHub-Installation repository...${NOFORMAT}"
@@ -682,6 +682,7 @@ download_dependencies
 handle_git_repository
 add_passwordless_ansible_execution
 generate_key_pair
+
 
 [[ 0 -eq $DRY_RUN ]] || die "Dry run complete. Not running Ansible" 0
 run_playbook
